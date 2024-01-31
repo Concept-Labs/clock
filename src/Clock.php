@@ -5,6 +5,7 @@ use Psr\Clock\ClockInterface;
 
 class Clock implements ClockInterface
 {
+    private ?string $timezone = null;
     /**
      * Returns the current time as a DateTimeImmutable object.
      *
@@ -12,7 +13,7 @@ class Clock implements ClockInterface
      */
     public function now(): \DateTimeImmutable
     {
-        return new \DateTimeImmutable();
+        return new \DateTimeImmutable("now", $this->timezone);
     }
 
     /**
@@ -25,4 +26,19 @@ class Clock implements ClockInterface
     {
         return new \DateTimeImmutable('now', new \DateTimeZone($timeZone));
     }
+
+    /**
+     * Returns Clock with timezone
+     *
+     * @param string $timeZone
+     * @return ClockInterface
+     */
+    public function withTimeZone(string $timeZone): ClockInterface
+    {
+        $clone = clone $this;
+        $clone->timezone = $timeZone;
+
+        return $clone;
+    }
+
 }
